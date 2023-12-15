@@ -1,0 +1,120 @@
+.home__main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.home__video__player__main__card {
+  display: flex;
+  height: 60vh;
+  gap: 0.4rem;
+  /* border: 2px solid red; */
+}
+
+.main__player__left__side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.3rem; */
+  justify-content: center;
+  /* background-color: #1c1d1f;
+  border-radius: 10px; */
+  padding: 10px;
+}
+.main__player__left__side > h1 {
+  margin: 0px;
+  color: #ff6f00;
+}
+.main__player__left__side > p > span {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ff6f00;
+}
+.home__video__player__main__card > :nth-child(2) {
+  flex: 2.5;
+
+  /* border: 1px solid green; */
+}
+
+.home__all__cams__display {
+  border-top: 1px solid #ff6f00;
+  margin-top: 20px;
+}
+
+.home__all_cams__header__card {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+.home__all_cams__header__card > div {
+  width: 30%;
+  /* border: 1px solid brown; */
+  border-radius: 7px;
+  overflow: hidden;
+  height: 35px;
+  display: flex;
+  color: #fff;
+  background-color: #1c1d1f;
+}
+
+.home__all_cams__header__card > div > input {
+  width: 80%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 0px 10px;
+  color: #fff;
+  font-size: 16px;
+}
+.home__all_cams__header__card > div > button {
+  height: 100%;
+  background-color: #f37413;
+  background-color: #ff6f00;
+  color: #fff;
+  width: 19%;
+  border: none;
+  outline: none;
+}
+
+.home__multi__all__small__videos {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  width: 100%;
+  /* border: 1px solid red; */
+}
+
+.multi__video__number__card {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.2;
+}
+.multi__video__number__card > p > span {
+  font-size: 20px;
+  font-weight: 500;
+  color: brown;
+}
+
+/* pagination */
+.paginat {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  color: #ff6f00;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.badge {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,76 @@
+.login-main-container {
+  background-image: url("D:\vamsi\react_projects\new_cam_project\public\Images\live.jpg");
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 95vh;
+  border-radius: 10px;
+}
+.login-img-con {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  color: white;
+}
+.Login-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 20px;
+  width: 350px;
+  /* border: 1px solid rgba(255, 255, 255, 0.534); */
+  background-color: rgba(255, 255, 255, 0.363);
+  height: 300px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 5px 25px;
+}
+.Login-form-container span {
+  height: 50px;
+  /* width: 300px; */
+  border: none;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.login-username-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border: 1px solid white;
+
+  border-radius: 7px;
+  padding: 2px;
+  color: white;
+}
+#usename {
+  outline-style: none;
+  height: 35px;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  color: white;
+  background-color: transparent;
+  padding: 2px 10px;
+}
+
+.login-btn {
+  background-color: rgb(14, 30, 253);
+
+  color: white;
+  border-radius: 7px;
+  border: none;
+  height: 35px;
+  margin-top: 12px;
+  font-size: 18px;
+}
+.login-btn:hover {
+  background-color: rgb(14, 137, 253);
+}

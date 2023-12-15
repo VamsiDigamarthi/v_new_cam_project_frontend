@@ -1,0 +1,26 @@
+.common__header__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* border: 2px solid red; */
+  /* width: 200%; */
+}
+
+.common__header__main > h2 {
+  margin: 0px;
+}
+.common__header__main > :nth-child(2) {
+  width: 15%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.common__header__main > :nth-child(2) > span {
+  color: #ff6f00;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.common__header__main > :nth-child(2) > img {
+  width: 40px;
+}

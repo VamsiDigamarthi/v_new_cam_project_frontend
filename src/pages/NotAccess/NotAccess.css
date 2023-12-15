@@ -1,0 +1,9 @@
+.not_access_main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 35px;
+  font-weight: bold;
+  height: 100vh;
+}

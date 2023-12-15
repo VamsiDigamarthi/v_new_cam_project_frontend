@@ -1,0 +1,59 @@
+.header__main {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__main > :nth-child(1) {
+  width: 87%;
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header__main > :nth-child(1) > button {
+  width: 160px;
+  height: 35px;
+  border-radius: 7px;
+  border: 2px solid #ff6f00;
+  color: #ff6f00;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 600;
+}
+.header__main > :nth-child(2) {
+  width: 30%;
+  color: #fff;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header__main > div > select {
+  width: 18.5%;
+  height: 35px;
+  color: #fff;
+
+  background-color: transparent;
+  border-radius: 7px;
+  /* margin-right: 20px; */
+  border: 2px solid grey;
+  font-size: 18px;
+  /* color: #ff6f00; */
+}
+.header__main > :nth-child(2) > span {
+  color: #ff6f00;
+  font-size: 18px;
+  font-weight: 500;
+}
+.header__main > :nth-child(2) > img {
+  width: 40px;
+}
+
+option {
+  color: #fff;
+  background-color: #0d0d0f;
+  /* margin-bottom: 10px; */
+}

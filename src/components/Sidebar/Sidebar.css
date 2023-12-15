@@ -1,0 +1,33 @@
+.sidebar__main {
+  display: flex;
+  background-color: #0d0d0f;
+  min-height: 100vh;
+  color: #fff;
+  padding: 15px;
+  gap: 0.4rem;
+}
+
+.sidebar__left__side {
+  width: 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  /* border-right: 1px solid grey; */
+  /* background-color: red; */
+  position: relative;
+}
+
+.sidebar__right__side {
+  width: 105%;
+}
+
+.side_bar_logout_icon {
+  position: absolute;
+  top: 530px;
+  left: 0px;
+  cursor: pointer;
+}
+
+.side_bar_upload_cams_data_card > h2 {
+  margin: 0px;
+}
