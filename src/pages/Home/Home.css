@@ -47,13 +47,15 @@
   justify-content: space-between;
   width: 100%;
   align-items: center;
+  /* height: 40px; */
+  margin: 10px 0px;
 }
 .home__all_cams__header__card > div {
   width: 30%;
   /* border: 1px solid brown; */
   border-radius: 7px;
   overflow: hidden;
-  height: 35px;
+  height: 40px;
   display: flex;
   color: #fff;
   background-color: #1c1d1f;
@@ -91,11 +93,24 @@
   display: flex;
   flex-direction: column;
   line-height: 0.2;
+  padding: 10px 20px;
 }
-.multi__video__number__card > p > span {
-  font-size: 20px;
+
+.multi__video__number__card > :nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mutli_video_number_second_card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mutli_video_number_second_card span {
+  font-size: 22px;
   font-weight: 500;
-  color: brown;
+  color: #ff6f00;
 }
 
 /* pagination */
@@ -108,6 +123,10 @@
   color: #ff6f00;
   font-size: 18px;
   font-weight: 700;
+  /* color: #008080; */
+  cursor: pointer;
+  color: #ffecd1;
+  /* color: rgba(0, 0, 255, 0.726); */
 }
 
 .badge {
@@ -117,4 +136,13 @@
   background-color: red;
   width: 20px;
   height: 20px;
+}
+
+/* new added style */
+
+.home_display_multi_cam {
+  box-shadow: #ff6f003b 0px 4px 12px;
+
+  /* border-radius: 7px;
+  overflow: hidden; */
 }

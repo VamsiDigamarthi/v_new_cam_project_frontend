@@ -1,0 +1,47 @@
+.delete__main__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.delete__main__card > h3 {
+  margin: 0px;
+}
+.delete__icons__card {
+  /* background-color: rgba(255, 255, 255, 0.808); */
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete__modal__button__card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 60%;
+}
+
+.delete__modal__button__card > :nth-child(1) {
+  width: 110px;
+  height: 35px;
+  background-color: #fff;
+  color: black;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 7px;
+}
+.delete__modal__button__card > :nth-child(2) {
+  width: 110px;
+  height: 35px;
+  background-color: #ff6f00;
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 7px;
+}

@@ -3,7 +3,10 @@ import "./Header.css";
 import { BiBell } from "react-icons/bi";
 import { useSelector } from "react-redux";
 
-export const Header = ({ apiAllCamsDataFromAppCom }) => {
+export const Header = ({
+  onHeaderDataApplyBtnClick,
+  apiAllCamsDataFromAppCom,
+}) => {
   const [state, setState] = useState([]);
 
   const [disticts, setDisticts] = useState([]);
@@ -11,6 +14,18 @@ export const Header = ({ apiAllCamsDataFromAppCom }) => {
   const [assembly, setAssembly] = useState([]);
 
   const UUU = useSelector((state) => state.authReducer.authData);
+
+  // selected value by user selecet element start
+
+  const [selectedState, setSelectedState] = useState("");
+
+  const [selectedDist, setSelectedDist] = useState("");
+
+  const [selectedAssembly, setSelectedAssembly] = useState("");
+
+  const [selectedMode, setSelectedMode] = useState("");
+
+  // selected value by user selecet element end
 
   useEffect(() => {
     const unique = [
@@ -23,39 +38,97 @@ export const Header = ({ apiAllCamsDataFromAppCom }) => {
   const selectSate = (e) => {
     setDisticts([]);
     setAssembly([]);
+    setSelectedDist("");
+    // setSelectedAssembly("");
+    setSelectedMode("");
     let value;
     if (e.target.value === "all") {
       value = "";
+      setSelectedDist("");
+      setDisticts([]);
+      setSelectedState(value);
+      setSelectedAssembly("");
+      //
+      return;
     } else {
       value = e.target.value;
     }
-    const uniqueDist = apiAllCamsDataFromAppCom?.filter((e) =>
-      e.State.includes(value)
-    );
+    // console.log(value);
+    const uniqueDist = apiAllCamsDataFromAppCom?.filter((e) => {
+      return value !== "" ? e.State.includes(value) : [];
+    });
+
+    // console.log(uniqueDist);
+
     const uniqueDists = [
       ...new Set(uniqueDist.map((item) => item.District_Name)),
     ];
 
-    console.log(uniqueDists);
+    // console.log(uniqueDists);
 
     setDisticts(uniqueDists);
+    setSelectedState(value);
+    setSelectedAssembly("");
   };
 
   const selectDistName = (e) => {
     setAssembly([]);
+    setSelectedMode("");
     let value;
     if (e.target.value === "all") {
       value = "";
+      setSelectedAssembly("");
+      setAssembly([]);
+      return;
     } else {
       value = e.target.value;
     }
-    const uniqueAssembly = apiAllCamsDataFromAppCom?.filter((e) =>
-      e.District_Name.includes(value)
+    const uniqueAssembly = apiAllCamsDataFromAppCom?.filter(
+      (e) => e.District_Name.includes(value) && e.State.includes(selectedState)
     );
     const uniqueAssemblys = [
       ...new Set(uniqueAssembly.map((item) => item.AC_Name)),
     ];
     setAssembly(uniqueAssemblys);
+    setSelectedDist(value);
+  };
+
+  const onSelectAssembly = (e) => {
+    setSelectedMode("");
+    let value;
+    if (e.target.value === "all") {
+      value = "";
+    } else {
+      value = e.target.value;
+    }
+    setSelectedAssembly(value);
+  };
+
+  const onSelectMode = (e) => {
+    let value;
+    if (e.target.value === "all") {
+      value = "";
+    } else {
+      value = e.target.value;
+    }
+    setSelectedMode(value);
+  };
+
+  // console.log(selectedState);
+
+  // console.log(selectedDist);
+
+  // console.log(selectedAssembly);
+
+  // apply btn click
+
+  const onApplyBtnClick = () => {
+    onHeaderDataApplyBtnClick({
+      selectedState,
+      selectedDist,
+      selectedAssembly,
+      selectedMode,
+    });
   };
 
   return (
@@ -79,7 +152,7 @@ export const Header = ({ apiAllCamsDataFromAppCom }) => {
             <option key={key}>{each}</option>
           ))}
         </select>
-        <select>
+        <select onChange={onSelectAssembly}>
           <option disabled selected hidden>
             select assembly
           </option>
@@ -88,7 +161,7 @@ export const Header = ({ apiAllCamsDataFromAppCom }) => {
             <option key={key}>{each}</option>
           ))}
         </select>
-        <select>
+        <select onChange={onSelectMode}>
           <option disabled selected hidden>
             status
           </option>
@@ -97,7 +170,7 @@ export const Header = ({ apiAllCamsDataFromAppCom }) => {
           <option>online</option>
           {/* <option>sdkndc</option> */}
         </select>
-        <button>Apply</button>
+        <button onClick={onApplyBtnClick}>Apply</button>
       </div>
       <div>
         <BiBell />

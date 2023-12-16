@@ -13,6 +13,18 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
     apiAllCamsDataFromAppCom,
   ]);
 
+  //
+
+  const [
+    disablePcInputWheneFilterDataEmpty,
+    setDisablePcInputWheneFilterDataEmpty,
+  ] = useState(true);
+
+  const [mainFirstFromMainCam, setMainFirstFromMainCam] = useState([]);
+
+  const [secondMainFromMainCam, setSecondMainFromMainCam] = useState([]);
+
+  //
   const [initialCam, setInitialCam] = useState(null);
 
   // const dispatch = useDispatch();
@@ -21,12 +33,12 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
 
   const endOffset = itemOffset + 6;
 
-  const currentItems = mainCamDataFromApp?.slice(itemOffset, endOffset);
+  const currentItems = secondMainFromMainCam?.slice(itemOffset, endOffset);
 
-  const pageCount = Math.ceil(mainCamDataFromApp?.length / 6);
+  const pageCount = Math.ceil(secondMainFromMainCam?.length / 6);
 
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * 6) % mainCamDataFromApp?.length;
+    const newOffset = (event.selected * 6) % secondMainFromMainCam?.length;
     setItemOffset(newOffset);
   };
 
@@ -34,10 +46,15 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
   const getALlCamsDataFun = () => {
     setInitialCam(mainCamDataFromApp[0]);
   };
+
   useEffect(() => {
     getALlCamsDataFun();
+    setSecondMainFromMainCam(mainCamDataFromApp);
+  }, [mainCamDataFromApp]);
+
+  useEffect(() => {
     setMainCamDataFromApp(apiAllCamsDataFromAppCom);
-  }, [apiAllCamsDataFromAppCom, mainCamDataFromApp]);
+  }, [apiAllCamsDataFromAppCom]);
 
   // select cam
 
@@ -61,9 +78,54 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
   //         console.log(e);
   //       });
 
+  const onSearchBasedOnPcNo = (e) => {
+    if (disablePcInputWheneFilterDataEmpty) {
+      let value;
+      if (mainFirstFromMainCam.length > 0) {
+        value = mainFirstFromMainCam.filter((each) =>
+          e.target.value === "" ? each : each.PS_No.includes(e.target.value)
+        );
+      } else {
+        value = mainCamDataFromApp.filter((each) =>
+          e.target.value === "" ? each : each.PS_No.includes(e.target.value)
+        );
+      }
+      setSecondMainFromMainCam(value);
+    }
+  };
+
+  //
+
+  const onHeaderDataApplyBtnClick = (data) => {
+    // console.log(data);
+    const value = mainCamDataFromApp.filter(
+      (each) =>
+        each.State.includes(data["selectedState"]) &&
+        each.District_Name.includes(data["selectedDist"]) &&
+        each.AC_Name.includes(data["selectedAssembly"]) &&
+        each.Status.includes(data["selectedMode"])
+    );
+
+    // console.log(value.length);
+
+    if (value.length <= 0) {
+      setDisablePcInputWheneFilterDataEmpty(false);
+    } else {
+      setDisablePcInputWheneFilterDataEmpty(true);
+    }
+    setMainFirstFromMainCam(value);
+    setSecondMainFromMainCam(value);
+    // console.log(value);
+  };
+
+  // console.log(currentItems);
+
   return (
     <div className="home__main">
-      <Header apiAllCamsDataFromAppCom={apiAllCamsDataFromAppCom} />
+      <Header
+        onHeaderDataApplyBtnClick={onHeaderDataApplyBtnClick}
+        apiAllCamsDataFromAppCom={apiAllCamsDataFromAppCom}
+      />
       <div className="home__video__player__main__card">
         <div className="main__player__left__side">
           <h1>Live Streaming</h1>
@@ -95,7 +157,11 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
         <div className="home__all_cams__header__card">
           <h3>Stream of all Cams</h3>
           <div>
-            <input type="text" placeholder="Pc No" />
+            <input
+              onChange={onSearchBasedOnPcNo}
+              type="text"
+              placeholder="Pc No"
+            />
             <button>Search</button>
           </div>
         </div>
@@ -112,6 +178,7 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
                 position: "relative",
               }}
               key={key}
+              className="home_display_multi_cam"
             >
               {/* <p className="badge">0</p> */}
               <ReactPlayer
@@ -122,20 +189,42 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
                 playing="true"
                 width="100%"
                 height="100%"
-                style={{
-                  border:
-                    each.mode === "Online"
-                      ? "2px solid green"
-                      : "2px solid #ff6f00",
-                  borderRadius: "10px",
-                  overflow: "hidden",
-                }}
+                // style={{
+                //   border:
+                //     each.mode === "Online"
+                //       ? "2px solid green"
+                //       : "2px solid #ff6f00",
+                //   borderRadius: "10px",
+                //   overflow: "hidden",
+                // }}
               />
               <div className="multi__video__number__card">
-                <h4>Some Dist Name</h4>
-                <p>
-                  Ps no <span>202</span>
-                </p>
+                <div>
+                  <h4>{each.District_Name}</h4>
+                  <h4>{each.AC_Name}</h4>
+                </div>
+                <div className="mutli_video_number_second_card">
+                  <p>
+                    Ps no{" "}
+                    <span
+                      style={{
+                        color: each.Status === "online" ? "green" : "#ff6f00",
+                      }}
+                    >
+                      {each.PS_No}
+                    </span>
+                  </p>
+                  <p>
+                    Ac no{" "}
+                    <span
+                      style={{
+                        color: each.Status === "online" ? "green" : "#ff6f00",
+                      }}
+                    >
+                      {each.AC_No}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           ))}

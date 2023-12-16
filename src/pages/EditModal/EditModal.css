@@ -1,0 +1,93 @@
+.edit__form__main__card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputBox {
+  position: relative;
+}
+
+.inputBox input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgba(243, 243, 243, 0.25);
+  /* background: #1d2b3a; */
+  outline: none;
+  border-radius: 5px;
+  /* color: #fff; */
+  font-size: 1.2rem;
+  background-color: transparent;
+  color: #fff;
+}
+
+.inputBox select {
+  width: 145%;
+  padding: 10px;
+  border: 2px solid rgba(83, 81, 81, 0.25);
+  /* background: #1d2b3a; */
+  outline: none;
+  border-radius: 5px;
+  /* color: #fff; */
+  font-size: 1rem;
+  height: 40px;
+}
+
+.inputBox select:focus {
+  border: 3px solid #fff;
+}
+
+.inputBox span {
+  position: absolute;
+  left: 0;
+  padding: 10px;
+  pointer-events: none;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.25);
+  text-transform: uppercase;
+  color: rgb(81, 81, 85);
+  transition: 0.5s;
+  top: 4px;
+}
+
+.inputBox input:valid ~ span,
+.inputBox input:focus ~ span {
+  color: #65a3c2;
+  transform: translateX(10px) translateY(-10px);
+  font-size: 0.75em;
+  padding: 2px 10px;
+  border-left: 1px solid #65a3c2;
+  border-right: 1px solid #65a3c2;
+  letter-spacing: 0.2em;
+  background-color: #fff;
+  color: #ff6f00;
+}
+
+.inputBox input:valid,
+.inputBox input:focus {
+  border: 1px solid #fff;
+}
+
+.form__pc__ac__card {
+  display: flex;
+  justify-content: space-between;
+  /* gap: 1rem; */
+  width: 93%;
+  /* background-color: red; */
+}
+
+.form__pc__ac__card > div {
+  width: 40% !important;
+}
+
+.edit__form__main__card > button {
+  width: 97.3%;
+  /* height: 40px; */
+  background-color: transparent;
+  color: #fff;
+  font-size: 19px;
+  font-weight: bold;
+  border: 2px solid #fff;
+  border-radius: 7px;
+  padding: 11px 0px;
+}

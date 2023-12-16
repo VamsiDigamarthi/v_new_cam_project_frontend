@@ -15,6 +15,15 @@ import { NotAccess } from "./pages/NotAccess/NotAccess";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+let headers = new Headers();
+headers.append("Content-Type", "application/json");
+headers.append("Accept", "application/json");
+
+headers.append("Access-Control-Allow-Origin", "http://localhost:3000");
+headers.append("Access-Control-Allow-Credentials", "true");
+
+headers.append("GET", "POST", "PUT", "DELETE", "OPTIONS");
+
 function App() {
   const [apiAllCamsDataFromAppCom, setApiAllCamsDataFromAppCom] = useState([]);
 
@@ -23,34 +32,24 @@ function App() {
   //
   // get all cams start
 
-  useEffect(() => {
-    // dispatch(allCamsData());
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    headers.append("Accept", "application/json");
-
-    headers.append("Access-Control-Allow-Origin", "http://localhost:3000");
-    headers.append("Access-Control-Allow-Credentials", "true");
-
-    headers.append("GET", "POST", "PUT", "DELETE", "OPTIONS");
-
-    const getALlCamsDataFun = async () => {
-      const API = axios.create({
-        baseURL: "http://localhost:8081",
-      });
-      await API.get("/all-cams", {
-        headers: headers,
+  const getALlCamsDataFun = async () => {
+    const API = axios.create({
+      baseURL: "http://localhost:8081",
+    });
+    await API.get("/all-cams", {
+      headers: headers,
+    })
+      .then((res) => {
+        // console.log(res.data);
+        setApiAllCamsDataFromAppCom(res.data);
+        //  setInitialCam(res.data[0]);
       })
-        .then((res) => {
-          // console.log(res.data);
-          setApiAllCamsDataFromAppCom(res.data);
-          //  setInitialCam(res.data[0]);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
+  useEffect(() => {
     getALlCamsDataFun();
   }, []);
 
@@ -80,6 +79,7 @@ function App() {
                 UUU ? (
                   UUU[0].role === "admin" ? (
                     <Admin
+                      getALlCamsDataFun={getALlCamsDataFun}
                       apiAllCamsDataFromAppCom={apiAllCamsDataFromAppCom}
                     />
                   ) : (
@@ -95,7 +95,9 @@ function App() {
               element={
                 UUU ? (
                   UUU[0].role === "super-admin" ? (
-                    <SuperAdmin />
+                    <SuperAdmin
+                      apiAllCamsDataFromAppCom={apiAllCamsDataFromAppCom}
+                    />
                   ) : (
                     <NotAccess />
                   )

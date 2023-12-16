@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SuperAdmin.css";
-import { CommonHeader } from "../CommonHeader/CommonHeader";
+// import { CommonHeader } from "../CommonHeader/CommonHeader";
 import { FaCameraRetro } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import Chart from "react-apexcharts";
@@ -9,6 +9,8 @@ import { MdArrowCircleUp } from "react-icons/md";
 import * as XLSX from "xlsx";
 import { motion } from "framer-motion";
 import { featureVariants } from "../../data/animation";
+import { Header } from "../Header/Header";
+import axios from "axios";
 
 const percentage = [
   {
@@ -28,11 +30,13 @@ const percentage = [
   },
 ];
 
-const SuperAdmin = () => {
+const SuperAdmin = ({ apiAllCamsDataFromAppCom }) => {
   const [options, setOptions] = useState({
     labels: ["Online", "Offline"],
     colors: ["green", "#ff6f00"],
   });
+
+  const [bulkUploadDisplayMsg, setBulkUploadDisplayMsg] = useState("");
 
   const [update, setUpdate] = useState([60, 40]);
 
@@ -41,6 +45,48 @@ const SuperAdmin = () => {
   const [excelFile, setExcelFile] = useState(null);
   const [typeerror, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
+
+  //
+  // newly add code using filters
+
+  const [onLineStatusNumberState, setOnLineStatusNumberState] = useState(0);
+
+  const [onLineStatusPercentageState, setOnLineStatusPercentageState] =
+    useState(0);
+  const [offLineStatusNumberState, setOffLineStatusNumberState] = useState(0);
+
+  const [offLineStatusPercentageState, setOffLineStatusPercentageState] =
+    useState(0);
+
+  const [mainCamDataFromApp, setMainCamDataFromApp] = useState([
+    apiAllCamsDataFromAppCom,
+  ]);
+
+  const [secondMainFromMainCam, setSecondMainFromMainCam] = useState([]);
+
+  useEffect(() => {
+    setSecondMainFromMainCam(mainCamDataFromApp);
+  }, [mainCamDataFromApp]);
+
+  useEffect(() => {
+    setMainCamDataFromApp(apiAllCamsDataFromAppCom);
+  }, [apiAllCamsDataFromAppCom]);
+
+  const onHeaderDataApplyBtnClick = (data) => {
+    // console.log(data);
+    const value = mainCamDataFromApp.filter(
+      (each) =>
+        each.State.includes(data["selectedState"]) &&
+        each.District_Name.includes(data["selectedDist"]) &&
+        each.AC_Name.includes(data["selectedAssembly"]) &&
+        each.Status.includes(data["selectedMode"])
+    );
+
+    setSecondMainFromMainCam(value);
+  };
+
+  // newly add code using filter end
+  //
 
   const handleFile = (e) => {
     let fileTypes = [
@@ -64,8 +110,8 @@ const SuperAdmin = () => {
       console.log("Please Select File");
     }
   };
-  const handleFileSubmit = (e) => {
-    e.preventDefault();
+
+  useEffect(() => {
     if (excelFile !== null) {
       const workbook = XLSX.read(excelFile, { type: "buffer" });
       const worksheetName = workbook.SheetNames[0];
@@ -73,14 +119,79 @@ const SuperAdmin = () => {
       const data = XLSX.utils.sheet_to_json(worksheet);
       setExcelData(data);
     }
+  }, [excelFile]);
+
+  const handleFileSubmit = (e) => {
+    e.preventDefault();
+    // console.log(excelData);
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+
+    headers.append("Access-Control-Allow-Origin", "http://localhost:3000");
+    headers.append("Access-Control-Allow-Credentials", "true");
+
+    headers.append("GET", "POST", "PUT", "DELETE", "OPTIONS");
+
+    const bulkUploadedSuperAdmin = async () => {
+      const API = axios.create({
+        baseURL: "http://localhost:8081",
+      });
+      await API.post("/bulk-upload", excelData, {
+        headers: headers,
+      })
+        .then((res) => {
+          console.log(res.data);
+          setBulkUploadDisplayMsg(res.data);
+          // setApiAllCamsDataFromAppCom(res.data);
+          //  setInitialCam(res.data[0]);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    bulkUploadedSuperAdmin();
   };
 
   // file upload code end
-  console.log(excelData);
+
+  // super-admin-charts-display-calculations start
+
+  useEffect(() => {
+    setUpdate([onLineStatusPercentageState, offLineStatusPercentageState]);
+  }, [onLineStatusPercentageState, offLineStatusPercentageState]);
+
+  useEffect(() => {
+    let onLineStatusNumber = secondMainFromMainCam.filter(
+      (each) => each.Status === "online"
+    );
+    let offLineStatusNumber =
+      secondMainFromMainCam.length - onLineStatusNumber.length;
+    let onLineStatusPercentage =
+      (onLineStatusNumber.length / secondMainFromMainCam.length) * 100;
+
+    let offLineStatusPercentage =
+      (offLineStatusNumber / secondMainFromMainCam.length) * 100;
+
+    // console.log(onLineStatusPercentage);
+
+    // console.log(offLineStatusPercentage);
+    setOnLineStatusNumberState(onLineStatusNumber);
+    setOnLineStatusPercentageState(onLineStatusPercentage);
+    setOffLineStatusNumberState(offLineStatusNumber);
+    setOffLineStatusPercentageState(offLineStatusPercentage);
+  }, [secondMainFromMainCam]);
+
+  // super-admin-charts-display-calculations end
+
+  // console.log(secondMainFromMainCam);
 
   return (
     <div className="super__admin__main">
-      <CommonHeader />
+      <Header
+        onHeaderDataApplyBtnClick={onHeaderDataApplyBtnClick}
+        apiAllCamsDataFromAppCom={apiAllCamsDataFromAppCom}
+      />
       <motion.div
         initial="offscreen"
         whileInView={"onscreen"}
@@ -100,50 +211,105 @@ const SuperAdmin = () => {
           </h2>
           <span>In this report you will find yor cam status</span>
           <div className="all__cam__card">
-            {percentage.map((each, key) => (
-              <div className="super_admin_car_number_card">
-                <div>
-                  <div
-                    className="icond__back__change"
-                    style={{
-                      background:
-                        key === 0
-                          ? "rgb(132, 232, 245)"
-                          : key === 1
-                          ? "green"
-                          : "#ff6f00",
-                    }}
-                  >
-                    <FaCameraRetro />
-                  </div>
-                  <BsThreeDots size={22} />
-                </div>
+            <div className="super_admin_car_number_card">
+              <div>
                 <div
+                  className="icond__back__change"
                   style={{
-                    fontFamily: "Courier New, Courier, monospace",
+                    background: "rgb(132, 232, 245)",
                   }}
                 >
-                  <h3 style={{ marginLeft: "0px", marginBottom: "10px" }}>
-                    2034
-                  </h3>
-                  <span>{each.text}</span>
+                  <FaCameraRetro />
                 </div>
-                <div
-                  className="cam_percentage_card"
-                  style={{
-                    color:
-                      key === 0
-                        ? "rgb(132, 232, 245)"
-                        : key === 1
-                        ? "green"
-                        : "#ff6f00",
-                  }}
-                >
-                  <MdArrowCircleUp size={20} />
-                  <span>{each.percentage}</span>
-                </div>
+                <BsThreeDots size={22} />
               </div>
-            ))}
+              <div
+                style={{
+                  fontFamily: "Courier New, Courier, monospace",
+                }}
+              >
+                <h3 style={{ marginLeft: "0px", marginBottom: "10px" }}>
+                  {secondMainFromMainCam.length}
+                </h3>
+                <span>Total Cams</span>
+              </div>
+              <div
+                className="cam_percentage_card"
+                style={{
+                  color: "rgb(132, 232, 245)",
+                }}
+              >
+                <MdArrowCircleUp size={20} />
+                <span>100%</span>
+              </div>
+            </div>
+            {/* second */}
+            <div className="super_admin_car_number_card">
+              <div>
+                <div
+                  className="icond__back__change"
+                  style={{
+                    background: "green",
+                  }}
+                >
+                  <FaCameraRetro />
+                </div>
+                <BsThreeDots size={22} />
+              </div>
+              <div
+                style={{
+                  fontFamily: "Courier New, Courier, monospace",
+                }}
+              >
+                <h3 style={{ marginLeft: "0px", marginBottom: "10px" }}>
+                  {onLineStatusNumberState.length}
+                </h3>
+                <span>On-line</span>
+              </div>
+              <div
+                className="cam_percentage_card"
+                style={{
+                  color: "green",
+                }}
+              >
+                <MdArrowCircleUp size={20} />
+                <span>{onLineStatusPercentageState.toFixed()}%</span>
+              </div>
+            </div>
+            {/* third */}
+            <div className="super_admin_car_number_card">
+              <div>
+                <div
+                  className="icond__back__change"
+                  style={{
+                    background: "#ff6f00",
+                  }}
+                >
+                  <FaCameraRetro />
+                </div>
+                <BsThreeDots size={22} />
+              </div>
+              <div
+                style={{
+                  fontFamily: "Courier New, Courier, monospace",
+                }}
+              >
+                <h3 style={{ marginLeft: "0px", marginBottom: "10px" }}>
+                  {offLineStatusNumberState}
+                </h3>
+                <span>Off-line</span>
+              </div>
+              <div
+                className="cam_percentage_card"
+                style={{
+                  color: "#ff6f00",
+                }}
+              >
+                <MdArrowCircleUp size={20} />
+                <span>{offLineStatusPercentageState.toFixed()}%</span>
+              </div>
+            </div>
+            {/* third end */}
           </div>
         </div>
         <div className="chats_second_card">
@@ -179,6 +345,7 @@ const SuperAdmin = () => {
           UPLOAD
         </button>
       </form>
+      {bulkUploadDisplayMsg && <p>{bulkUploadDisplayMsg.msg}</p>}
       {typeerror && (
         <div className="alert alert-danger" role="alert">
           {typeerror}

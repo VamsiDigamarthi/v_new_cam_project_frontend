@@ -5,6 +5,7 @@
   color: #fff;
   padding: 15px;
   gap: 0.4rem;
+  position: relative;
 }
 
 .sidebar__left__side {
