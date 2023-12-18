@@ -61,6 +61,8 @@
   letter-spacing: 0.2em;
   background-color: #fff;
   color: #ff6f00;
+  /* color: #fff;
+  background-color: #ff6f00; */
 }
 
 .inputBox input:valid,

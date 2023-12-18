@@ -5,8 +5,10 @@ import axios from "axios";
 export default function DeleteModal({
   onOpenDeleteModal,
   deleteModalSendDataFromAdminState,
-  getALlCamsDataFun,
   deleteTost,
+  onHeaderDataApplyBtnClick,
+  filterningDataStore,
+  getALlCamsDataFun,
 }) {
   const submitDeleteRecord = async () => {
     let headers = new Headers();
@@ -27,11 +29,13 @@ export default function DeleteModal({
       headers: headers,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         // onEditModalCrossClick();
-        getALlCamsDataFun();
         onOpenDeleteModal();
         deleteTost();
+        filterningDataStore
+          ? onHeaderDataApplyBtnClick(filterningDataStore)
+          : getALlCamsDataFun();
       })
       .catch((e) => {
         console.log(e);

@@ -1,5 +1,5 @@
 const camsReducer = (
-  state = { cams: null, loading: false, error: false, loading: false },
+  state = { cams: null, loading: false, error: false },
   action
 ) => {
   switch (action.type) {

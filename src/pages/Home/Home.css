@@ -8,6 +8,7 @@
 .home__video__player__main__card {
   display: flex;
   height: 60vh;
+  height: 30vw;
   gap: 0.4rem;
   /* border: 2px solid red; */
 }
@@ -25,12 +26,24 @@
 .main__player__left__side > h1 {
   margin: 0px;
   color: #ff6f00;
+  font-size: 2.5vw;
+}
+.main__player__left__side > h3 {
+  font-size: 2vw;
+}
+.main__player__left__side > p {
+  font-size: 1.6vw;
 }
 .main__player__left__side > p > span {
-  font-size: 20px;
+  font-size: 1.6vw;
   font-weight: 600;
   color: #ff6f00;
 }
+
+.main__player__left__side span {
+  font-size: 1.2vw;
+}
+
 .home__video__player__main__card > :nth-child(2) {
   flex: 2.5;
 
@@ -86,6 +99,7 @@
   gap: 2rem;
   flex-wrap: wrap;
   width: 100%;
+  /* background-color: red; */
   /* border: 1px solid red; */
 }
 
@@ -100,15 +114,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1.2vw;
 }
 .mutli_video_number_second_card {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1.2vw;
 }
 
 .mutli_video_number_second_card span {
-  font-size: 22px;
+  font-size: 1.6vw;
   font-weight: 500;
   color: #ff6f00;
 }
@@ -142,7 +158,7 @@
 
 .home_display_multi_cam {
   box-shadow: #ff6f003b 0px 4px 12px;
-
+  /* width: 31.5% !important; */
   /* border-radius: 7px;
   overflow: hidden; */
 }

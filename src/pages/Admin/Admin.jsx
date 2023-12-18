@@ -15,7 +15,9 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
+import Loader from "react-js-loader";
 // const dropIn = {
 //   hidden: {
 //     y: "-100vh",
@@ -60,6 +62,15 @@ const deleteDropIn = {
   },
 };
 
+let headers = new Headers();
+headers.append("Content-Type", "application/json");
+headers.append("Accept", "application/json");
+
+headers.append("Access-Control-Allow-Origin", "*");
+headers.append("Access-Control-Allow-Credentials", "true");
+
+headers.append("GET", "POST", "PUT", "DELETE", "OPTIONS");
+
 const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
   const [mainCamAdminDataFromApp, setMainCamAdminDataFromApp] = useState([
     apiAllCamsDataFromAppCom,
@@ -75,6 +86,14 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
   const [secondMainFromMainCam, setSecondMainFromMainCam] = useState([]);
 
   const [itemOffset, setItemOffset] = useState(0);
+
+  // filtering data store to edit modal and delete model state
+
+  const [filterningDataStore, setFilteringDataStore] = useState(null);
+
+  // apply btn click loader state
+
+  const [applyBtnLoader, setApplyBtnLoader] = useState(false);
 
   // edit modal open state
 
@@ -131,25 +150,51 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
 
   // header data from header apply btn start
 
-  const onHeaderDataApplyBtnClick = (data) => {
-    // console.log(data);
-    const value = mainCamAdminDataFromApp.filter(
-      (each) =>
-        each.State.includes(data["selectedState"]) &&
-        each.District_Name.includes(data["selectedDist"]) &&
-        each.AC_Name.includes(data["selectedAssembly"]) &&
-        each.Status.includes(data["selectedMode"])
-    );
+  const onHeaderDataApplyBtnClick = async (data) => {
+    setApplyBtnLoader(true);
+    setFilteringDataStore(data);
+    const API = axios.create({
+      baseURL: "http://localhost:8081",
+    });
+    await API.get(
+      `/filter-data-from-btn-click?State=${data["selectedState"]}&Dist=${data["selectedDist"]}&Assembly=${data["selectedAssembly"]}&Status=${data["selectedMode"]}`,
+      {
+        headers: headers,
+      }
+    )
+      .then((res) => {
+        setApplyBtnLoader(false);
+        // console.log(res.data);
+        if (res.data <= 0) {
+          setDisablePcInputWheneFilterDataEmpty(false);
+        } else {
+          setDisablePcInputWheneFilterDataEmpty(true);
+        }
 
-    console.log(value.length);
+        setMainFirstFromMainCam(res.data);
+        setSecondMainFromMainCam(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
-    if (value.length <= 0) {
-      setDisablePcInputWheneFilterDataEmpty(false);
-    } else {
-      setDisablePcInputWheneFilterDataEmpty(true);
-    }
-    setMainFirstFromMainCam(value);
-    setSecondMainFromMainCam(value);
+    // const value = mainCamAdminDataFromApp.filter(
+    //   (each) =>
+    //     each.State.includes(data["selectedState"]) &&
+    //     each.District_Name.includes(data["selectedDist"]) &&
+    //     each.AC_Name.includes(data["selectedAssembly"]) &&
+    //     each.Status.includes(data["selectedMode"])
+    // );
+
+    // // console.log(value.length);
+
+    // if (value.length <= 0) {
+    //   setDisablePcInputWheneFilterDataEmpty(false);
+    // } else {
+    //   setDisablePcInputWheneFilterDataEmpty(true);
+    // }
+    // setMainFirstFromMainCam(value);
+    // setSecondMainFromMainCam(value);
     // console.log(value);
   };
 
@@ -204,6 +249,71 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
       progress: undefined,
       theme: "light",
     });
+
+  const returnTableView = () => {
+    if (!applyBtnLoader) {
+      return (
+        <div className="table__main__card">
+          <div className="table__header__card">
+            <span>State</span>
+            <span>District Name</span>
+            <span>PS No</span>
+            <span>AC No</span>
+            <span>Camera ID</span>
+            <span>Status</span>
+            <span className="table__header__last__span">Action</span>
+          </div>
+          <div className="table__body__card">
+            {currentItems.map((each, key) => (
+              <div key={key}>
+                <span>{each.State}</span>
+                <span>{each.District_Name}</span>
+                <span>{each.PS_No}</span>
+                <span>{each.AC_No}</span>
+                <span>{each.Camera_ID}</span>
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    //   justifyContent: "center",
+                  }}
+                >
+                  {" "}
+                  <div
+                    style={{
+                      color:
+                        each.Status !== "online" ? "#ff6f00" : "greenyellow",
+                      marginTop: "10px",
+                      marginRight: "5px",
+                    }}
+                  >
+                    <GoDotFill />
+                  </div>
+                  {each.Status}
+                </span>
+                <span className="table__header__last__span new__add__icons__style">
+                  <MdEdit onClick={() => onEditModalOpen(each)} />
+                  <MdDelete onClick={() => onDeleteModalOpen(each?.id)} />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="admin-loader-card">
+          <Loader
+            type="bubble-top"
+            // bgColor={color}
+            color="#f42b03"
+            // title={"bubble-top"}
+            size={70}
+          />
+        </div>
+      );
+    }
+  };
 
   return (
     <>
@@ -260,65 +370,20 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
           </div>
         </div>
         {/* table views */}
-        <div className="table__main__card">
-          <div className="table__header__card">
-            <span>State</span>
-            <span>District Name</span>
-            <span>PS No</span>
-            <span>AC No</span>
-            <span>Camera ID</span>
-            <span>Status</span>
-            <span className="table__header__last__span">Action</span>
-          </div>
-          <div className="table__body__card">
-            {currentItems.map((each, key) => (
-              <div key={key}>
-                <span>{each.State}</span>
-                <span>{each.District_Name}</span>
-                <span>{each.PS_No}</span>
-                <span>{each.AC_No}</span>
-                <span>{each.Camera_ID}</span>
-                <span
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    //   justifyContent: "center",
-                  }}
-                >
-                  {" "}
-                  <div
-                    style={{
-                      color:
-                        each.Status !== "online" ? "#ff6f00" : "greenyellow",
-                      marginTop: "10px",
-                      marginRight: "5px",
-                    }}
-                  >
-                    <GoDotFill />
-                  </div>
-                  {each.Status}
-                </span>
-                <span className="table__header__last__span new__add__icons__style">
-                  <MdEdit onClick={() => onEditModalOpen(each)} size={20} />
-                  <MdDelete
-                    onClick={() => onDeleteModalOpen(each?.id)}
-                    size={20}
-                  />
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <ReactPaginate
-          breakLabel="..."
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          pageCount={pageCount}
-          previousLabel="< previous"
-          renderOnZeroPageCount={null}
-          className="paginat"
-        />
+        {returnTableView()}
+        {/*  */}
+        {!applyBtnLoader && (
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={pageCount}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+            className="paginat"
+          />
+        )}
       </motion.div>
       {openEditModal && (
         <motion.div
@@ -338,6 +403,8 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
             onEditModalCrossClick={onEditModalCrossClick}
             editModalSendDataFromAdminState={editModalSendDataFromAdminState}
             editTost={editTost}
+            onHeaderDataApplyBtnClick={onHeaderDataApplyBtnClick}
+            filterningDataStore={filterningDataStore}
           />
         </motion.div>
       )}
@@ -359,6 +426,8 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
             getALlCamsDataFun={getALlCamsDataFun}
             onOpenDeleteModal={onOpenDeleteModal}
             deleteTost={deleteTost}
+            onHeaderDataApplyBtnClick={onHeaderDataApplyBtnClick}
+            filterningDataStore={filterningDataStore}
           />
         </motion.div>
       )}

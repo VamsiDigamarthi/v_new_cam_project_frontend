@@ -12,29 +12,11 @@ import { featureVariants } from "../../data/animation";
 import { Header } from "../Header/Header";
 import axios from "axios";
 
-const percentage = [
-  {
-    id: "1",
-    percentage: "100.0 %",
-    text: "Total Cams",
-  },
-  {
-    id: "2",
-    percentage: "64.0 %",
-    text: "On-line",
-  },
-  {
-    id: "3",
-    percentage: "42.0 %",
-    text: "Off-line",
-  },
-];
-
 const SuperAdmin = ({ apiAllCamsDataFromAppCom }) => {
-  const [options, setOptions] = useState({
+  const options = {
     labels: ["Online", "Offline"],
     colors: ["green", "#ff6f00"],
-  });
+  };
 
   const [bulkUploadDisplayMsg, setBulkUploadDisplayMsg] = useState("");
 

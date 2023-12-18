@@ -13,13 +13,13 @@
   align-items: center;
 }
 .header__main > :nth-child(1) > button {
-  width: 160px;
+  width: 11vw;
   height: 35px;
   border-radius: 7px;
   border: 2px solid #ff6f00;
   color: #ff6f00;
   background-color: transparent;
-  font-size: 16px;
+  font-size: 1.3vw;
   font-weight: 600;
 }
 .header__main > :nth-child(2) {
@@ -49,7 +49,7 @@
   font-weight: 500;
 }
 .header__main > :nth-child(2) > img {
-  width: 40px;
+  width: 3vw;
 }
 
 option {

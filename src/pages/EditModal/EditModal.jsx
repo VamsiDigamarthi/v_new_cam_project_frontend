@@ -7,6 +7,8 @@ const EditModal = ({
   onEditModalCrossClick,
   getALlCamsDataFun,
   editTost,
+  onHeaderDataApplyBtnClick,
+  filterningDataStore,
 }) => {
   const [modalData, setModalData] = useState(null);
 
@@ -40,10 +42,13 @@ const EditModal = ({
       headers: headers,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         onEditModalCrossClick();
-        getALlCamsDataFun();
+        // getALlCamsDataFun();
         editTost();
+        filterningDataStore
+          ? onHeaderDataApplyBtnClick(filterningDataStore)
+          : getALlCamsDataFun();
       })
       .catch((e) => {
         console.log(e);

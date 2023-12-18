@@ -43,6 +43,7 @@
   border: none;
   background-color: #ff6f00;
   color: #fff;
+  font-size: 1.2vw;
 }
 
 .filter__sort__main__card {
@@ -91,7 +92,7 @@
 .table__header__card > span {
   width: 14%;
   /* background-color: red; */
-  font-size: 18px;
+  font-size: 1.3vw;
   font-weight: bold;
 }
 .table__header__card > :nth-child(5) {
@@ -129,7 +130,7 @@
 .table__body__card > div > span {
   width: 14%;
   overflow: scroll;
-  font-size: 16px;
+  font-size: 1.2vw;
   font-weight: 500;
 }
 .table__body__card > :nth-child(even) {
@@ -144,9 +145,11 @@
 
 .new__add__icons__style > :nth-child(1) {
   color: greenyellow;
+  font-size: 1.5vw;
 }
 .new__add__icons__style > :nth-child(2) {
   color: #ff6f00;
+  font-size: 1.5vw;
 }
 
 .cam__dot__span {
@@ -209,4 +212,12 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+}
+
+.admin-loader-card {
+  height: 40vh;
+  /* background-color: red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

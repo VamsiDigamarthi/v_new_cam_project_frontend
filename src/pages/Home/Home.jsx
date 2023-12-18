@@ -5,8 +5,17 @@ import ReactPlayer from "react-player";
 // import { values } from "../../data/camsdata";
 
 import ReactPaginate from "react-paginate";
+import axios from "axios";
 // import { useDispatch, useSelector } from "react-redux";
 // import { allCamsData } from "../../action/CamAction";
+let headers = new Headers();
+headers.append("Content-Type", "application/json");
+headers.append("Accept", "application/json");
+
+headers.append("Access-Control-Allow-Origin", "*");
+headers.append("Access-Control-Allow-Credentials", "true");
+
+headers.append("GET", "POST", "PUT", "DELETE", "OPTIONS");
 
 const Home = ({ apiAllCamsDataFromAppCom }) => {
   const [mainCamDataFromApp, setMainCamDataFromApp] = useState([
@@ -26,6 +35,10 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
 
   //
   const [initialCam, setInitialCam] = useState(null);
+
+  // apply btn click loader state
+
+  const [applyBtnLoader, setApplyBtnLoader] = useState(false);
 
   // const dispatch = useDispatch();
 
@@ -96,25 +109,51 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
 
   //
 
-  const onHeaderDataApplyBtnClick = (data) => {
+  const onHeaderDataApplyBtnClick = async (data) => {
     // console.log(data);
-    const value = mainCamDataFromApp.filter(
-      (each) =>
-        each.State.includes(data["selectedState"]) &&
-        each.District_Name.includes(data["selectedDist"]) &&
-        each.AC_Name.includes(data["selectedAssembly"]) &&
-        each.Status.includes(data["selectedMode"])
-    );
+    setApplyBtnLoader(true);
+    const API = axios.create({
+      baseURL: "http://localhost:8081",
+    });
+    await API.get(
+      `/filter-data-from-btn-click?State=${data["selectedState"]}&Dist=${data["selectedDist"]}&Assembly=${data["selectedAssembly"]}&Status=${data["selectedMode"]}`,
+      {
+        headers: headers,
+      }
+    )
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data <= 0) {
+          setDisablePcInputWheneFilterDataEmpty(false);
+        } else {
+          setDisablePcInputWheneFilterDataEmpty(true);
+        }
+        setInitialCam(res?.data[0]);
+        setApplyBtnLoader(false);
+        setMainFirstFromMainCam(res.data);
+        setSecondMainFromMainCam(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
-    // console.log(value.length);
+    // const value = mainCamDataFromApp.filter(
+    //   (each) =>
+    //     each.State.includes(data["selectedState"]) &&
+    //     each.District_Name.includes(data["selectedDist"]) &&
+    //     each.AC_Name.includes(data["selectedAssembly"]) &&
+    //     each.Status.includes(data["selectedMode"])
+    // );
 
-    if (value.length <= 0) {
-      setDisablePcInputWheneFilterDataEmpty(false);
-    } else {
-      setDisablePcInputWheneFilterDataEmpty(true);
-    }
-    setMainFirstFromMainCam(value);
-    setSecondMainFromMainCam(value);
+    // // console.log(value.length);
+
+    // if (value.length <= 0) {
+    //   setDisablePcInputWheneFilterDataEmpty(false);
+    // } else {
+    //   setDisablePcInputWheneFilterDataEmpty(true);
+    // }
+    // setMainFirstFromMainCam(value);
+    // setSecondMainFromMainCam(value);
     // console.log(value);
   };
 

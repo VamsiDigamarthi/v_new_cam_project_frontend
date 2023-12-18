@@ -69,6 +69,7 @@ export const Header = ({
     setDisticts(uniqueDists);
     setSelectedState(value);
     setSelectedAssembly("");
+    setSelectedDist("");
   };
 
   const selectDistName = (e) => {
@@ -79,6 +80,7 @@ export const Header = ({
       value = "";
       setSelectedAssembly("");
       setAssembly([]);
+      setSelectedDist("");
       return;
     } else {
       value = e.target.value;
@@ -89,6 +91,7 @@ export const Header = ({
     const uniqueAssemblys = [
       ...new Set(uniqueAssembly.map((item) => item.AC_Name)),
     ];
+    setSelectedAssembly("");
     setAssembly(uniqueAssemblys);
     setSelectedDist(value);
   };
