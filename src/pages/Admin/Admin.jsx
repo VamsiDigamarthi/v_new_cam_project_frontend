@@ -87,6 +87,8 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
 
   const [itemOffset, setItemOffset] = useState(0);
 
+  const [checkBoxArr, setCheckBoxArr] = useState(false);
+
   // filtering data store to edit modal and delete model state
 
   const [filterningDataStore, setFilteringDataStore] = useState(null);
@@ -118,6 +120,7 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
   const pageCount = Math.ceil(secondMainFromMainCam?.length / 6);
 
   const handlePageClick = (event) => {
+    console.log(event.selected);
     const newOffset = (event.selected * 6) % secondMainFromMainCam?.length;
     setItemOffset(newOffset);
   };
@@ -177,25 +180,6 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
       .catch((e) => {
         console.log(e);
       });
-
-    // const value = mainCamAdminDataFromApp.filter(
-    //   (each) =>
-    //     each.State.includes(data["selectedState"]) &&
-    //     each.District_Name.includes(data["selectedDist"]) &&
-    //     each.AC_Name.includes(data["selectedAssembly"]) &&
-    //     each.Status.includes(data["selectedMode"])
-    // );
-
-    // // console.log(value.length);
-
-    // if (value.length <= 0) {
-    //   setDisablePcInputWheneFilterDataEmpty(false);
-    // } else {
-    //   setDisablePcInputWheneFilterDataEmpty(true);
-    // }
-    // setMainFirstFromMainCam(value);
-    // setSecondMainFromMainCam(value);
-    // console.log(value);
   };
 
   // edit modal open start
@@ -239,7 +223,7 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
     });
 
   const editTost = () =>
-    toast.success("edit cam suddesfully ..!", {
+    toast.success("edit cam details suddesfully ..!", {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -249,6 +233,12 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
       progress: undefined,
       theme: "light",
     });
+
+  // console.log(currentItems);
+
+  // const singleCheckBoxFunc = (e) => {
+  //   console.log(e.target.value);
+  // };
 
   const returnTableView = () => {
     if (!applyBtnLoader) {
@@ -315,6 +305,8 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
     }
   };
 
+  console.log(currentItems);
+
   return (
     <>
       <motion.div
@@ -356,15 +348,9 @@ const Admin = ({ apiAllCamsDataFromAppCom, getALlCamsDataFun }) => {
           <div className="filter__sort__main__card">
             <select>
               <option>Filted By</option>
-              {/* <option>hja</option>
-            <option>hja</option>
-            <option>hja</option> */}
             </select>
             <select>
               <option>Sort By</option>
-              {/* <option>hja</option>
-            <option>hja</option>
-            <option>hja</option> */}
             </select>
             <FaDownload />
           </div>

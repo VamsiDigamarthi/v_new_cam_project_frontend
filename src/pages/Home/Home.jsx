@@ -189,6 +189,7 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
             playing="true"
             width="100%"
             height="100%"
+            // muted={false}
           />
         </div>
       </div>
@@ -228,6 +229,7 @@ const Home = ({ apiAllCamsDataFromAppCom }) => {
                 playing="true"
                 width="100%"
                 height="100%"
+                // muted={false}
                 // style={{
                 //   border:
                 //     each.mode === "Online"
